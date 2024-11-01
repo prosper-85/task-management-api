@@ -11,6 +11,7 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { BulkUpdateTaskDto } from './dto/bulk-update-task.dto';
 import { Task, TaskStatus } from 'src/schemas/task.schema';
+import { PaginationQueryDto } from 'src/project/dto/pagination-query.dto';
 
 @Injectable()
 export class TaskService {
@@ -29,10 +30,17 @@ export class TaskService {
 
   async findAll(
     projectId: Types.ObjectId,
+    paginationQuery: PaginationQueryDto,
     status?: TaskStatus,
     dueDate?: Date,
-  ): Promise<Task[]> {
-    const query = { project: projectId, deletedAt: null };
+  ): Promise<{
+    tasks: Task[];
+    total: number;
+    page: number;
+    totalPages: number;
+  }> {
+    const { page = 1, limit = 10 } = paginationQuery;
+    const query: any = { project: projectId, deletedAt: null };
 
     if (status) {
       query['status'] = status;
@@ -40,18 +48,26 @@ export class TaskService {
     if (dueDate) {
       query['dueDate'] = { $lte: dueDate };
     }
+    const [tasks, total] = await Promise.all([
+      this.taskModel
+        .find(query)
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .exec(),
+      this.taskModel.countDocuments(query),
+    ]);
+    const totalPages = Math.ceil(total / limit);
 
-    return this.taskModel.find(query).exec();
+    return {
+      tasks,
+      total,
+      page,
+      totalPages,
+    };
   }
 
-  async findOne(taskID: Types.ObjectId): Promise<Task | null> {
-    if (!isValidObjectId(taskID)) {
-      throw new NotFoundException('Invalid Task ID format');
-    }
-    console.log('Searching for task with ID:', taskID);
-    const task = await this.taskModel.findById({ taskId: taskID }).exec();
-    console.log('Query result:', task);
-
+  async findOne(taskId: Types.ObjectId): Promise<Task> {
+    const task = await this.taskModel.findById({ _id: taskId }).exec();
     if (!task) {
       throw new NotFoundException('Task not found');
     }

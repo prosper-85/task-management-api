@@ -11,9 +11,10 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
 
   const config = new DocumentBuilder()
-    .setTitle('Task Management API')
-    .setDescription('Task management API documentation')
+    .setTitle('Project and Task API')
+    .setDescription('API for managing projects and tasks')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

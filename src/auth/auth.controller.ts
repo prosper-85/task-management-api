@@ -4,7 +4,6 @@ import { CreateUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { LocalAuthGuard } from './guard/local.guard';
 import {
-  ApiAcceptedResponse,
   ApiBadRequestResponse,
   ApiCreatedResponse,
   ApiTags,

@@ -8,6 +8,7 @@ import { Model, Types } from 'mongoose';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { Project } from 'src/schemas/project.schema';
+import { PaginationQueryDto } from './dto/pagination-query.dto';
 
 @Injectable()
 export class ProjectService {
@@ -24,8 +25,31 @@ export class ProjectService {
     return newProject.save();
   }
 
-  async findAllByOwner(ownerId: Types.ObjectId): Promise<Project[]> {
-    return this.project.find({ owner: ownerId, deletedAt: null }).exec();
+  async findAllByOwner(
+    ownerId: Types.ObjectId,
+    paginationQuery: PaginationQueryDto,
+  ): Promise<{
+    projects: Project[];
+    total: number;
+    page: number;
+    totalPages: number;
+  }> {
+    const { page = 1, limit = 10 } = paginationQuery;
+    const [projects, total] = await Promise.all([
+      this.project
+        .find({ owner: ownerId, deletedAt: null })
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .exec(),
+      this.project.countDocuments({ owner: ownerId, deletedAt: null }),
+    ]);
+    const totalPages = Math.ceil(total / limit);
+    return {
+      projects,
+      total,
+      page,
+      totalPages,
+    };
   }
 
   async findOneById(projectId: Types.ObjectId): Promise<Project> {
