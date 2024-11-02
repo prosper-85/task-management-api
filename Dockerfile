@@ -1,4 +1,4 @@
-# Use the official Node.js 16 image as the base image
+# Use the official Node.js 20 image as the base image
 FROM node:20.15.1
 
 # Set the working directory inside the container
@@ -10,11 +10,17 @@ COPY package*.json ./
 # Install project dependencies
 RUN npm install
 
+# Remove any previous build output if it exists
+RUN rm -rf dist
+
 # Copy the rest of the application source code to the container
 COPY . .
 
-# Expose the port your Nest.js application is listening on
+# Build the application
+RUN npm run build
+
+# Expose the port your NestJS application listens on
 EXPOSE 3000
 
-# Command to start your Nest.js application
-CMD [ "npm", "run", "start:prod" ]
+# Command to start your NestJS application in production mode
+CMD ["npm", "run", "start:prod"]

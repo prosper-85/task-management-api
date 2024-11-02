@@ -7,7 +7,7 @@ import {
   IsString,
   IsDateString,
 } from 'class-validator';
-import { TaskStatus } from 'src/schemas/task.schema';
+import { TaskStatus } from '../../schemas/task.schema';
 
 export class CreateTaskDto {
   @ApiProperty()

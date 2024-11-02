@@ -7,7 +7,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
-import { Project } from 'src/schemas/project.schema';
+import { Project } from '../schemas/project.schema';
 import { PaginationQueryDto } from './dto/pagination-query.dto';
 
 @Injectable()

@@ -19,7 +19,7 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { BulkUpdateTaskDto } from './dto/bulk-update-task.dto';
 import { TaskService } from './task.service';
-import { Task, TaskStatus } from 'src/schemas/task.schema';
+import { Task, TaskStatus } from '../schemas/task.schema';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -30,7 +30,7 @@ import {
   ApiParam,
   ApiBearerAuth,
 } from '@nestjs/swagger';
-import { PaginationQueryDto } from 'src/project/dto/pagination-query.dto';
+import { PaginationQueryDto } from '../project/dto/pagination-query.dto';
 
 @ApiTags('Tasks')
 @ApiBearerAuth()
@@ -101,6 +101,9 @@ export class TaskController {
   async findOne(@Param('id') id: string, @Req() req) {
     const taskId = new Types.ObjectId(id);
     const task = await this.tasksService.findOne(taskId);
+    if (!task) {
+      throw new NotFoundException('Task not found');
+    }
     return task;
   }
 

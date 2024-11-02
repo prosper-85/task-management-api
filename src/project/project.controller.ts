@@ -27,7 +27,7 @@ import {
   ApiParam,
   ApiBearerAuth,
 } from '@nestjs/swagger';
-import { Project } from 'src/schemas/project.schema';
+import { Project } from '../schemas/project.schema';
 import { PaginationQueryDto } from './dto/pagination-query.dto';
 
 @ApiTags('Projects')

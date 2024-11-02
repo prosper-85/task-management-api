@@ -1,17 +1,12 @@
 // src/tasks/tasks.service.ts
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { isValidObjectId, Model, Types } from 'mongoose';
-import { UpdateResult } from 'mongodb';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { BulkUpdateTaskDto } from './dto/bulk-update-task.dto';
-import { Task, TaskStatus } from 'src/schemas/task.schema';
-import { PaginationQueryDto } from 'src/project/dto/pagination-query.dto';
+import { Task, TaskStatus } from '../schemas/task.schema';
+import { PaginationQueryDto } from '../project/dto/pagination-query.dto';
 
 @Injectable()
 export class TaskService {

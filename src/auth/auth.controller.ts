@@ -8,7 +8,7 @@ import {
   ApiCreatedResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { User } from 'src/schemas/user.schema';
+import { User } from '../schemas/user.schema';
 
 @ApiTags('Authentication')
 @Controller('auth')

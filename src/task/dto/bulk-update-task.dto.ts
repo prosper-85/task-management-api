@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsArray, ArrayNotEmpty, IsMongoId } from 'class-validator';
-import { TaskStatus } from 'src/schemas/task.schema';
+import { TaskStatus } from '../../schemas/task.schema';
 
 export class BulkUpdateTaskDto {
   @ApiProperty()
