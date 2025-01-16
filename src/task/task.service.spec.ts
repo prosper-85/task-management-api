@@ -99,7 +99,7 @@ describe('TaskService', () => {
     it('should find a task by ID', async () => {
       const result = await service.findOne(mockTask._id);
       expect(result).toEqual(mockTask);
-      expect(taskModel.findById).toHaveBeenCalledWith(mockTask._id);
+      expect(taskModel.findById).toHaveBeenCalledWith(mockTask._id); // Keep as ObjectId
     });
 
     it('should throw NotFoundException if task not found', async () => {
@@ -134,7 +134,9 @@ describe('TaskService', () => {
         taskIds: [mockTask._id.toString()],
         status: TaskStatus.COMPLETED,
       };
-      taskModel.find.mockResolvedValue([mockTask]);
+      taskModel.find.mockReturnValue({
+        exec: jest.fn().mockResolvedValue([mockTask]),
+      });
       taskModel.updateMany.mockResolvedValue({ nModified: 1 });
 
       const result = await service.bulkUpdateStatus(bulkUpdateTaskDto);
