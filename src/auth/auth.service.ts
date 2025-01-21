@@ -27,7 +27,15 @@ export class AuthService {
     return this.userService.createUser(createUserDto);
   }
 
-  async login(loginDto: LoginUserDto): Promise<{ access_token: string }> {
+  async login(loginDto: LoginUserDto): Promise<{
+    user: {
+      access_token: string;
+      username: string;
+      id: any;
+      email: string;
+      full_name: string;
+    };
+  }> {
     const user = await this.userService.validateUserCredentials(
       loginDto.email,
       loginDto.password,
@@ -36,9 +44,19 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const payload = { username: user.username, sub: user._id };
+    const payload = {
+      username: user.username,
+      sub: user._id,
+    };
+
     return {
-      access_token: this.jwtService.sign(payload),
+      user: {
+        id: user._id,
+        full_name: user.full_name,
+        email: user.email,
+        username: user.username,
+        access_token: this.jwtService.sign(payload),
+      },
     };
   }
   async validateUser(email: string, password: string): Promise<User | null> {

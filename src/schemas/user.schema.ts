@@ -5,6 +5,10 @@ import { Document } from 'mongoose';
 @Schema({ timestamps: true })
 export class User extends Document {
   @ApiProperty()
+  @Prop({ require: true })
+  full_name: string;
+
+  @ApiProperty()
   @Prop({ unique: true, require: true })
   username: string;
 
