@@ -7,6 +7,7 @@ import { ProjectModule } from './project/project.module';
 import { TaskModule } from './task/task.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './users/users.module';
+import { LocationModule } from './location/location.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { UserModule } from './users/users.module';
     }),
     AuthModule,
     UserModule,
+    LocationModule,
     ProjectModule,
     TaskModule,
   ],
